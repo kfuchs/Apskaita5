@@ -1,6 +1,6 @@
 # Apskaita5 codebase facts (for the case study and the panel)
 
-Read from this repository at commit `2320f1c`. Paths are relative to `Source/`.
+Read from this repository at commit `2320f1c`: 1,109 VB.NET files, 521,971 lines (excluding backups). Paths are relative to `Source/`.
 Counts come from `find`, `grep` and `wc`.
 
 ## Size and stack

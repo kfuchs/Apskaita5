@@ -19,7 +19,7 @@ TICKET_REDUCTION = 0.40              # migrated tenants raise 40% fewer tickets
 NEW_PER_MONTH = {5: 10, 6: 70, 7: 240, 8: 400, 9: 450, 10: 550, 11: 600,
                  12: 650, 13: 300, 14: 150, 15: 0, 16: 100, 17: 350, 18: 330}
 ARCHIVE_LAG_MONTHS = 2               # legacy DB removed from hosting after G4
-LEGACY_SWITCH_OFF_MONTH = 24
+LEGACY_SWITCH_OFF_MONTH = 20           # last cutovers in month 18, archived by month 20
 
 # ---- Cloud run cost (bottom-up, A1/A3) ---------------------------------
 SHARED_EUR_MONTH = 25_000            # edge, identity, observability, control plane, non-prod
