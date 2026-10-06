@@ -6,7 +6,8 @@ The case study itself is written as a Claude Doc and exported to PDF.
 
 | File | What it is |
 | --- | --- |
-| `Apskaita5-ERP-Modernization-Case-Study.pdf` | The case study, exported to PDF (A4, 50 pages) |
+| `Apskaita5-ERP-Modernization-Case-Study.pdf` | The case study, exported to PDF (A4, 21 pages) |
+| `Apskaita5-ERP-Modernization-Reference.pdf` | Reference tab: code evidence, full stack, cost inputs, KPI trajectory, glossary (7 pages) |
 | `One-Pager-Plain-English.pdf` | One-page explanation for a non-technical reader |
 | `One-Pager-What-Not-To-Do.pdf` | One page on rejected paths and the traps caught in review |
 | `codebase-facts.md` | Facts read from this repository (sizes, stack, schema, rules, statutory code, UI, security), with file paths, for the panel discussion |
