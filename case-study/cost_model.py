@@ -13,7 +13,7 @@ LEGACY_INFRA_EUR_YEAR = 3.1e6        # brief
 LEGACY_FIXED_SHARE = 0.20            # part of legacy cost that does not fall per tenant
 TICKETS_PER_MONTH = 6500             # brief
 TICKET_COST_EUR = 12                 # A12
-TICKET_REDUCTION = 0.40              # migrated tenants raise 40% fewer tickets
+TICKET_REDUCTION = 0.40              # migrated tenants raise 40% fewer tickets (capacity, not cash)
 
 # ---- Migration plan: new tenants live per programme month ---------------
 NEW_PER_MONTH = {5: 10, 6: 70, 7: 240, 8: 400, 9: 450, 10: 550, 11: 600,
@@ -86,9 +86,11 @@ def run(cloud_mult=1.0, slip=0, team_mult=1.0, months=60):
     rows, cash, alls = [], 0.0, 0.0
     payback_cash = payback_all = None
     for m in range(1, months + 1):
-        net = LEGACY_INFRA_EUR_YEAR / 12 - (cloud(m) + legacy(m)) + support(m) - programme(m)
+        # Cash counts infrastructure only. Fewer tickets and less maintenance free
+        # capacity; they become cash only if staffing spend actually falls.
+        net = LEGACY_INFRA_EUR_YEAR / 12 - (cloud(m) + legacy(m)) - programme(m)
         cash += net
-        alls += net + capacity(m)
+        alls += net + support(m) + capacity(m)
         if payback_cash is None and m > 12 and cash >= 0:
             payback_cash = m
         if payback_all is None and m > 12 and alls >= 0:
@@ -105,17 +107,17 @@ def yearly(rows):
         ms = rows[12 * (y - 1):12 * y]
         s = lambda k: sum(r[k] for r in ms) / 1e6
         infra_saving = LEGACY_INFRA_EUR_YEAR / 1e6 - s('cloud') - s('legacy')
-        net = infra_saving + s('support') - s('programme')
-        out.append((y, s('cloud'), s('legacy'), infra_saving, s('support'), s('programme'), net, s('capacity')))
+        net = infra_saving - s('programme')
+        out.append((y, s('cloud'), s('legacy'), infra_saving, s('programme'), net, s('support'), s('capacity')))
     return out
 
 
 if __name__ == '__main__':
     rows, pc, pa = run()
-    print('Year  cloud  legacy  infra_saving  support  programme  net_cash  capacity (M EUR)')
+    print('Year  cloud  legacy  infra_saving  programme  net_cash | freed: support  engineering (M EUR)')
     for y in yearly(rows):
-        print('%d    %5.2f  %6.2f  %12.2f  %7.2f  %9.2f  %8.2f  %8.2f' % y)
-    print('Payback month: cash %s, including freed capacity %s' % (pc, pa))
+        print('%d    %5.2f  %6.2f  %12.2f  %9.2f  %8.2f |        %7.2f  %11.2f' % y)
+    print('Payback month: cash %s, including freed support and engineering capacity %s' % (pc, pa))
     for m in (6, 9, 12, 18, 30):
         r = rows[m - 1]
         per = r['cloud'] * 12 / r['tenants'] if r['tenants'] else float('nan')
